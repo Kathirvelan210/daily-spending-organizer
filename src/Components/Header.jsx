@@ -1,16 +1,30 @@
-// src/components/Header.js
+// src/components/Header.jsx
+// Header component with navigation and conditional rendering
 import React, { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../Context/AuthContext';
+import { CartContext } from '../Context/CartContext';
 
 function Header() {
   const { user, logout } = useContext(AuthContext);
+  const { getItemCount } = useContext(CartContext);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Hide header on login and signup pages
+  const hideHeader = location.pathname === '/login' || location.pathname === '/signup';
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
+
+  // Don't render header on auth pages
+  if (hideHeader) {
+    return null;
+  }
+
+  const cartCount = getItemCount();
 
   return (
     <header className="header">
@@ -25,8 +39,18 @@ function Header() {
           {user ? (
             <>
               <Link to="/dashboard" className="nav-link">Dashboard</Link>
-              <Link to="/cart" className="nav-link">Cart</Link>
-              <span className="user-welcome">Hi, {user.username}</span>
+              {user.role === 'admin' && (
+                <Link to="/admin" className="nav-link">Admin</Link>
+              )}
+              <Link to="/cart" className="nav-link cart-link">
+                Cart
+                {cartCount > 0 && (
+                  <span className="cart-badge">{cartCount}</span>
+                )}
+              </Link>
+              <span className="user-welcome">
+                Hi, {user.username} {user.role === 'admin' && '👑'}
+              </span>
               <button onClick={handleLogout} className="btn btn-outline">Logout</button>
             </>
           ) : (

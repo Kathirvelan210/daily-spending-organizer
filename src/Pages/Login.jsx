@@ -12,14 +12,20 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const ok = login(username, password);
-    if (ok) {
-      navigate('/dashboard');
+    const result = login(username, password);
+    if (result.success) {
+      // Navigate based on role
+      if (result.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/dashboard');
+      }
     } else {
-      setError('Invalid credentials. Please try again.');
+      setError(result.message || 'Invalid credentials. Please try again.');
     }
   };
 
+  
   return (
     <div className="auth-container">
       <div className="auth-card">

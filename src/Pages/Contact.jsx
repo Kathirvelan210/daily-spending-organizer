@@ -6,17 +6,40 @@ function Contact() {
     email: '',
     message: ''
   });
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Save to localStorage
+    const submissions = JSON.parse(localStorage.getItem('contactSubmissions') || '[]');
+    const newSubmission = {
+      ...formData,
+      timestamp: new Date().toISOString(),
+      id: Date.now()
+    };
+    localStorage.setItem('contactSubmissions', JSON.stringify([...submissions, newSubmission]));
+    
     alert('Message sent successfully!');
+    setSubmitted(true);
     setFormData({ name: '', email: '', message: '' });
+    
+    // Hide success message after 3 seconds
+    setTimeout(() => setSubmitted(false), 3000);
   };
 
   return (
     <div className="page-container">
       <div className="content-card">
         <h2>Contact Us</h2>
+        <p>We'd love to hear from you! Send us a message.</p>
+        
+        {submitted && (
+          <div className="success-message">
+            ✅ Thank you! Your message has been sent successfully.
+          </div>
+        )}
+        
         <div className="contact-content">
           <div className="contact-info">
             <h3>Get in Touch</h3>

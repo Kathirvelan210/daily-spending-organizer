@@ -13,28 +13,34 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  const signup = (username, password) => {
+  // Signup function with role and email support
+  const signup = (username, email, password, role = 'user') => {
     // Get existing users or empty array
     const users = JSON.parse(localStorage.getItem('users') || '[]');
     // Prevent duplicate usernames
     if (users.find(u => u.username === username)) {
-      return false;
+      return { success: false, message: 'Username already exists' };
     }
-    const newUser = { username, password };
+    // Prevent duplicate emails
+    if (users.find(u => u.email === email)) {
+      return { success: false, message: 'Email already exists' };
+    }
+    const newUser = { username, email, password, role };
     localStorage.setItem('users', JSON.stringify([...users, newUser]));
     // Auto-login the new user
     localStorage.setItem('currentUser', JSON.stringify(newUser));
     setUser(newUser);
-    return true;
+    return { success: true };
   };
 
+  // Login function
   const login = (username, password) => {
     const users = JSON.parse(localStorage.getItem('users') || '[]');
     const found = users.find(u => u.username === username && u.password === password);
-    if (!found) return false;
+    if (!found) return { success: false, message: 'Invalid credentials' };
     localStorage.setItem('currentUser', JSON.stringify(found));
     setUser(found);
-    return true;
+    return { success: true, role: found.role };
   };
 
   const logout = () => {

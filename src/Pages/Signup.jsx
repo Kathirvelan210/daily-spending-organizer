@@ -5,7 +5,9 @@ import { AuthContext } from '../Context/AuthContext';
 
 function Signup() {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('user');
   const [error, setError] = useState('');
   const { signup } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -16,11 +18,16 @@ function Signup() {
       setError('Password must be at least 6 characters long');
       return;
     }
-    const ok = signup(username, password);
-    if (ok) {
-      navigate('/dashboard');
+    const result = signup(username, email, password, role);
+    if (result.success) {
+      // Navigate based on role
+      if (role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/dashboard');
+      }
     } else {
-      setError('Username already exists. Please choose another.');
+      setError(result.message);
     }
   };
 
@@ -39,12 +46,27 @@ function Signup() {
             required 
           />
           <input 
+            type="email"
+            value={email} 
+            onChange={e => setEmail(e.target.value)} 
+            placeholder="Email" 
+            required 
+          />
+          <input 
             type="password" 
             value={password} 
             onChange={e => setPassword(e.target.value)} 
             placeholder="Password (min 6 characters)" 
             required 
           />
+          <select 
+            value={role} 
+            onChange={e => setRole(e.target.value)}
+            className="role-select"
+          >
+            <option value="user">User</option>
+            <option value="admin">Admin</option>
+          </select>
           <button type="submit" className="btn btn-primary btn-full">Sign Up</button>
         </form>
         <p className="auth-switch">
