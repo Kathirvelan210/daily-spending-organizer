@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/daily-spending-organizer/static/css/main.2f5bc30a.css",
+    "main.js": "/daily-spending-organizer/static/js/main.775937ab.js",
+    "static/js/453.ef989693.chunk.js": "/daily-spending-organizer/static/js/453.ef989693.chunk.js",
+    "index.html": "/daily-spending-organizer/index.html",
+    "main.2f5bc30a.css.map": "/daily-spending-organizer/static/css/main.2f5bc30a.css.map",
+    "main.775937ab.js.map": "/daily-spending-organizer/static/js/main.775937ab.js.map",
+    "453.ef989693.chunk.js.map": "/daily-spending-organizer/static/js/453.ef989693.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2f5bc30a.css",
+    "static/js/main.775937ab.js"
+  ]
+}
